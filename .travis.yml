@@ -4,19 +4,19 @@ services:
     - docker
 
 before_install:
-    - docker build -t andybrough/react-test -f ./client/Dockerfile.dev ./client
+    - docker build -t gsaltd/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-    - docker run andybrough/react-test npm test -- --coverage
+    - docker run gsaltd/react-test npm test -- --coverage
 
 after_success:
-    - docker build -t andybrough/nulti-client ./client
-    - docker build -t andybrough/nulti-nginx ./nginx
-    - docker build -t andybrough/nulti-server ./server
-    - docker build -t andybrough/nulti-worker ./worker
+    - docker build -t gsaltd/nulti-client ./client
+    - docker build -t gsaltd/nulti-nginx ./nginx
+    - docker build -t gsaltd/nulti-server ./server
+    - docker build -t gsaltd/nulti-worker ./worker
 
     - echo "$DOCKER_PASSWORD" | docker login -username "$DOCKER_ID" --password-stdin
-    - docker push andybrough/nulti-client
-    - docker push andybrough/nulti-nginx
-    - docker push andybrough/nulti-server
-    - docker push andybrough/nulti-worker
+    - docker push gsaltd/nulti-client
+    - docker push gsaltd/nulti-nginx
+    - docker push gsaltd/nulti-server
+    - docker push gsaltd/nulti-worker
