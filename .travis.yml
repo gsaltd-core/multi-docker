@@ -15,7 +15,7 @@ after_success:
     - docker build -t andybrough/nulti-server ./server
     - docker build -t andybrough/nulti-worker ./worker
 
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --pasword-stdin
+    - echo "$DOCKER_PASSWORD" | docker login -username "$DOCKER_ID" --password-stdin
     - docker push andybrough/nulti-client
     - docker push andybrough/nulti-nginx
     - docker push andybrough/nulti-server
