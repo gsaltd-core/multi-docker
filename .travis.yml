@@ -1,0 +1,22 @@
+language: generic 
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t andybrough/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run andybrough/react-test npm test -- --coverage
+
+after_success:
+    - docker build -t andybrough/nulti-client ./client
+    - docker build -t andybrough/nulti-nginx ./nginx
+    - docker build -t andybrough/nulti-server ./server
+    - docker build -t andybrough/nulti-worker ./worker
+
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --pasword-stdin
+    - docker push andybrough/nulti-client
+    - docker push andybrough/nulti-nginx
+    - docker push andybrough/nulti-server
+    - docker push andybrough/nulti-worker
