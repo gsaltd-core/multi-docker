@@ -10,13 +10,26 @@ script:
     - docker run gsaltd/react-test npm test -- --coverage
 
 after_success:
-    - docker build -t gsaltd/nulti-client ./client
-    - docker build -t gsaltd/nulti-nginx ./nginx
-    - docker build -t gsaltd/nulti-server ./server
-    - docker build -t gsaltd/nulti-worker ./worker
+    - docker build -t gsaltd/multi-client ./client
+    - docker build -t gsaltd/multi-nginx ./nginx
+    - docker build -t gsaltd/multi-server ./server
+    - docker build -t gsaltd/multi-worker ./worker
 
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-    - docker push gsaltd/nulti-client
-    - docker push gsaltd/nulti-nginx
-    - docker push gsaltd/nulti-server
-    - docker push gsaltd/nulti-worker
+    - docker push gsaltd/multi-client
+    - docker push gsaltd/multi-nginx
+    - docker push gsaltd/multi-server
+    - docker push gsaltd/multi-worker
+
+    deploy:
+        provider: elasticbeanstalk
+        region: "us-east-2"
+        app: "multi-docker"
+        env: "MultiDocker-env"
+        bucket_name: "elasticbeanstalk-us-east-2-944354727820"
+        bucket_path: "multi-docker"
+        on: 
+            branch: master
+        access_key_id: "$AWS_ACCESS_KEY"
+        secret_access_key: "$AWS_SECRET_KEY"
+    
